@@ -32,7 +32,6 @@ app.post("/tasks", async (req, res) => {
       data: task,
     });
   } catch (err) {
-    // Catch only handling errors related to server issues, 500 status code
     console.log(err);
   }
 });
