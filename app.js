@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const Task = require("./models/Task");
 
 const app = express();
 app.use(express.json());
@@ -15,18 +14,16 @@ async function dbConnect() {
   }
 }
 dbConnect();
+const Task = require("./models/Task");
   // creat Port
 const port = process.env.PORT || 3000;
 // POST
 app.post("/tasks", async (req, res) => {
   try {
     const {title, isCompleted} = req.body;
-    if (!title || isCompleted === undefined) {
-      return res
-        .status(400)
-        .json({ message: "Error: Missed Data. All fields are required" });
+    if (!title) {
+      return res.status(400).json({ message: "Error: Missed Data. All fields are required" });
     }
-
     const task = await Task.create({ title, isCompleted });
     console.log("Received user data:", task);
 
@@ -42,7 +39,7 @@ app.post("/tasks", async (req, res) => {
 // GET
 app.get("/tasks", async (req, res) => {
   const tasks = await Task.find();
-  res.json({ success: true, count: tasks.length, data: tasks });
+  res.json({ success: true, count: tasks.length});
 });
 
 // Run the server
